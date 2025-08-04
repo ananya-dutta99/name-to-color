@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Name to Color</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+	<style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+</style>
+
+	<style>
+		
+		body {
+			margin: 0;
+			padding: 0;
+			font-family:'Courier New', Courier, monospace;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background-color: #e2e2e2;
+			color: #ffffff;
+			text-align: center;
+		}
+
+		.header {
+			font-family:Rubik Mono One;
+			font-size: 3rem;
+			margin-bottom: 1.5em;
+		}
+
+		#name-input {
+			padding: 1em;
+			font-size: 1.2rem;
+			border: none;
+			border-radius: 4px;
+			width: 300px;
+			max-width: 90%;
+			font-family: 'Courier New', Courier, monospace;
+		}
+
+		button {
+			margin-top: 2em;
+			padding: 0.75em 1.5em;
+			font-size: 1rem;
+			border: none;
+			border-radius: 8px;
+			background-color: #444;
+			color: #fff;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			font-family: 'Courier New', Courier, monospace;
+		}
+
+		button:hover {
+			background-color: #666;
+		}
+
+		#results {
+			margin-top: 2em;
+			font-size: 1.2rem;
+			text-shadow: 1px 1px 2px black;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="header">What color is your name?</div>
+
+	<input type="text" id="name-input" placeholder="Enter your name">
+
+	<button onclick="name2color()">Reveal Your Color</button>
+
+	<div id="results"></div>
+
+	<script>
+		function name2color() {
+			const nameInput = document.querySelector('#name-input');
+			const yourname = nameInput.value.trim();
+			let namelower = yourname.toLowerCase();
+
+			if (!namelower) return;
+
+			let asciiArray = [];
+			for (let i = 0; i < namelower.length; i++) {
+				let asciiValue = namelower.charCodeAt(i);
+				asciiArray.push(asciiValue);
+			}
+
+			let hexArray = [];
+			for (let i = 0; i < namelower.length; i++) {
+				let hexPart1 = Math.floor(asciiArray[i] / 16);
+				let hexPart2 = (asciiArray[i] % 16).toString(16);
+				let hexValue = `${hexPart1}${hexPart2}`;
+				hexArray.push(hexValue);
+			}
+
+			let fullHex = hexArray.join('');
+			let l = fullHex.length;
+
+			let sixHex = [];
+
+			if (l < 6) {
+				fullHex = fullHex.padEnd(6, '0');
+			} else if (l > 6) {
+				let divider = Math.floor(l / 6);
+				let bigHexArray = Array.from(fullHex);
+				for (let i = 1; i < bigHexArray.length; i += divider) {
+					sixHex.push(bigHexArray[i]);
+				}
+				fullHex = sixHex.join('').slice(0, 6);
+			}
+
+			document.body.style.backgroundColor = `#${fullHex}`;
+
+			const output = document.querySelector('#results');
+			output.innerHTML = `The hexcode correlating to "<strong>${yourname}</strong>" is <strong>#${fullHex}</strong> which looks like this!`;
+		}
+	</script>
+
+</body>
+
+</html>
